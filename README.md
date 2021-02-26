@@ -1,11 +1,12 @@
 ## Course Assignments
 
 # Data inspection
+Inspected data to look for header and number of rows
 
 head -n5 snp_position.txt tail -n5 snp_position.txt head -n 5 fang_et_al_genotypes.txt tail -n 5 fang_et_al_genotypes.txt wc fang_et_al_genotypes.txt wc snp_position.txt
 
 # Sorting Before joining
-
+removed header and adeded data to the sorted file
 head -n 1 snp_position.txt > sorted_snp1.txt tail -n+2 snp_position.txt | sort -k1,1 >>sorted_snp1.txt
 
 # Rearranging the columns in the file according to final output
@@ -29,6 +30,7 @@ head -n 1 transposed_genotype_maize.txt > sorted_maize.txt tail -n+4 transposed_
 join -1 1 -2 1 --header sorted_column_snp1.txt sorted_maize.txt > joined_file.txt sed -i "s/ /\t/g" joined_file.txt 
 
 # Creating 10 files (1 for each chromosome) with SNPs ordered based on increasing position values and with missing data encoded by'?'
+created maize directroy and chromosome ascendind and descending files. Header excluded to sorted properly. Data was then piped to awk
 ```mkdir maize```
 ```head -n 1 joined_file.txt | awk 'BEGIN {FS="\t"; OFS="\t"}{ for (i=1; i <= 10; i++) print $0 >"maize/ordered_chromosomes_"i"_asc.txt"}'```
 ```tail -n +2 joined_file.txt | sort -k2,2 -k3,3n | awk 'BEGIN {FS="\t"; OFS="\t"}{ if($2 >= 1 && $2 <= 10) {  print  >>"maize/ordered_"$2"_asc.txt"}}'```
@@ -54,6 +56,7 @@ join -1 1 -2 1 --header sorted_column_snp1.txt sorted_maize.txt > joined_file.tx
 ```awk -f transpose.awk genotype_teosinte.txt > transposed_genotype_teosinte.txt```
 
 # Sorting the data before join
+Skipped secodn and third row since it didn't have genotypic data.
 ```head -n 1 transposed_genotype_teosinte.txt > teosinte_sorted.txt```
 ```tail -n+4 transposed_genotype_teosinte.txt | sort  -k1,1 >>teosinte_sorted.txt```
 
@@ -66,6 +69,7 @@ join -1 1 -2 1 --header sorted_column_snp1.txt sorted_maize.txt > joined_file.tx
 ```head -n 1 teosinte_joined.txt | awk 'BEGIN {FS="\t"; OFS="\t"}{ for (i=1; i <= 10; i++) print $0 >"teosinte/Chromosome_"i"_asc.txt"}'```
 
 # Creating 10 files (1 for each chromosome) with SNPs ordered based on increasing position values and with the missing data encoded by this symbol: -
+sorted data piped into awk
 ```head -n 1 teosinte_joined.txt | awk 'BEGIN {FS="\t"; OFS="\t"}{ for (i=1; i <= 10; i++) print $0 >"teosinte/Chromosome_"i"_des.txt"}'```
 ```tail -n +2 teosinte_joined.txt | sort -k2,2 -k3,3rn | sed 's/?/-/g' | awk 'BEGIN {FS="\t"; OFS="\t"}{ if($2 >= 1 && $2 <= 10) {  print  >>"Chromosome_"$2"_des.txt"}}'```
 
