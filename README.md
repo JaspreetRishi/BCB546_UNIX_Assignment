@@ -77,3 +77,5 @@ join -1 1 -2 1 --header sorted_column_snp1.txt sorted_maize.txt > joined_file.tx
 ```head -n 1 teosinte_joined.txt >teosinte/multiple_chromosome.txt```
 ```tail -n +2 teosinte_joined.txt |  awk 'BEGIN {FS="\t"; OFS="\t"}{ if($2 == "multiple") {  print  >>"teosinte/multiple_chromosome.txt"}}'```
 
+that's all
+
